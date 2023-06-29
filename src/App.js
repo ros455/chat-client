@@ -65,7 +65,7 @@ function App() {
       roomId: user.numberRoom,
       user: user.name
     });
-      await axios.post('http://localhost:4444/create-room',{
+      await axios.post('https://chat-server-ros-a1684ddf6fd2.herokuapp.com/create-room',{
       messages: [],
       roomId: user.numberRoom,
     }) 
@@ -73,7 +73,7 @@ function App() {
     setIsBool(false)
     setRoomId(user.numberRoom)
     
-    await axios.get('http://localhost:4444/get-current-messages')
+    await axios.get('https://chat-server-ros-a1684ddf6fd2.herokuapp.com/get-current-messages')
     .then((res) => res.data)
     .then((res) => {
       const resoult = res.filter((el) => el.roomId == user.numberRoom);
@@ -87,7 +87,7 @@ function App() {
   const sendMessage = () => {
     const currentUser = allRooms.filter((user) => user.numberRoom == roomId);
 
-    axios.patch('http://localhost:4444/add-message',{
+    axios.patch('https://chat-server-ros-a1684ddf6fd2.herokuapp.com/add-message',{
       message,
       user: stateUser,
       id: roomId
