@@ -11,6 +11,7 @@ function App() {
   const [isBool, setIsBool] = useState(true);
   const [messagesStory, setMessagesStory] = useState([]);
   const [currentMessagesStory, setCurrentMessagesStory] = useState([]);
+  const [allMessages, setAllMessages] = useState([]);
   const [allRooms, setAllRooms] = useState([
     {
       name: 'user1',
@@ -35,7 +36,103 @@ function App() {
     {
       name: 'user6',
       numberRoom: '6'
-    }
+    },
+    {
+      name: 'user7',
+      numberRoom: '7'
+    },
+    {
+      name: 'user8',
+      numberRoom: '8'
+    },
+    {
+      name: 'user9',
+      numberRoom: '9'
+    },
+    {
+      name: 'user10',
+      numberRoom: '10'
+    },
+    {
+      name: 'user11',
+      numberRoom: '11'
+    },
+    {
+      name: 'user12',
+      numberRoom: '12'
+    },
+    {
+      name: 'user13',
+      numberRoom: '13'
+    },
+    {
+      name: 'user14',
+      numberRoom: '14'
+    },
+    {
+      name: 'user15',
+      numberRoom: '15'
+    },
+    {
+      name: 'user16',
+      numberRoom: '16'
+    },
+    {
+      name: 'user17',
+      numberRoom: '17'
+    },
+    {
+      name: 'user18',
+      numberRoom: '18'
+    },
+    {
+      name: 'user19',
+      numberRoom: '19'
+    },
+    {
+      name: 'user20',
+      numberRoom: '20'
+    },
+    {
+      name: 'user21',
+      numberRoom: '21'
+    },
+    {
+      name: 'user22',
+      numberRoom: '22'
+    },
+    {
+      name: 'user23',
+      numberRoom: '23'
+    },
+    {
+      name: 'user24',
+      numberRoom: '24'
+    },
+    {
+      name: 'user25',
+      numberRoom: '25'
+    },
+    {
+      name: 'user26',
+      numberRoom: '26'
+    },
+    {
+      name: 'user27',
+      numberRoom: '27'
+    },
+    {
+      name: 'user28',
+      numberRoom: '28'
+    },
+    {
+      name: 'user29',
+      numberRoom: '29'
+    },
+    {
+      name: 'user30',
+      numberRoom: '30'
+    },
   ]);
 
   const messageRef = useRef(null);
@@ -50,10 +147,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    messageRef.current.scrollTo(0,99999)
-  },[currentMessagesStory])
+      setAllMessages([...messagesStory,...currentMessagesStory])
+  },[currentMessagesStory, messagesStory])
 
-  console.log('currentMessagesStory',currentMessagesStory);
+  useEffect(() => {
+    messageRef.current.scrollTo(0,99999)
+  },[allMessages])
 
   const sendSocket = () => {
     socket.emit('Room: Join',{roomId});
@@ -61,6 +160,9 @@ function App() {
   };
   
   const joinChatFunc = async (user) => {
+    if(!stateUser) {
+      return alert('Введіть імя користувача')
+    }
     socket.emit('Room: Join',{
       roomId: user.numberRoom,
       user: user.name
@@ -77,8 +179,8 @@ function App() {
     .then((res) => res.data)
     .then((res) => {
       const resoult = res.filter((el) => el.roomId == user.numberRoom);
-      console.log('resoult',resoult);
-      setMessagesStory(resoult)
+      console.log('resoult',resoult[0]?.messages);
+      setMessagesStory(resoult[0]?.messages)
     })
   };
 
@@ -106,26 +208,12 @@ function App() {
           </div>
         ))}
       <div className='message_wrapper' ref={messageRef}>
-      <div>
-        {messagesStory.length != 0 && messagesStory.map((el, idx) => (
-          <div key={idx}>
-            {el.messages.map((item) =>(
-              <div key={item._id} className={item.user == stateUser ? 'active_user' : 'another_user'}>
-                <p>Message: {item.message}</p>
-                <p style={{color:'grey', fontSize:'11px'}}>User: {item.user}</p>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-      <div>
-        {currentMessagesStory.length != 0 && currentMessagesStory.map((el, idx) => (
-          <div key={idx} className={el.user == stateUser ? 'active_user' : 'another_user'}>
-                <p>Message: {el.mes}</p>
-                <p style={{color:'grey', fontSize:'11px'}}>User: {el.user}</p>
-          </div>
-        ))}
-      </div>
+      {!isBool && allMessages.length != 0 && allMessages.map((message, idx) => (
+        <div key={idx} className={message.user == stateUser ? 'active_user' : 'another_user'}>
+                <p>{message.user}: {message.message}</p>
+                <p style={{color:'grey', fontSize:'11px'}}>User: {message.user}</p>
+        </div>
+      ))}
       </div>
       {!isBool && (
         <div style={{marginTop:'20px'}}>
